@@ -73,7 +73,12 @@ In this project, we are developing a predictive model that leverages machine lea
    ```bash
    streamlit run dashboard.py
    ```
-
+  ```bash
+      python -m venv venv
+      source venv/bin/activate
+      pip install -r requirements.txt
+      streamlit run dashboard.py
+   ```
 ### 7. File Structure
 ```
 Brain_Stroke_Prediction/
