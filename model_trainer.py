@@ -15,6 +15,8 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.preprocessing import StandardScaler
 from sklearn.pipeline import make_pipeline
 import time
+from lightgbm import LGBMClassifier
+from catboost import CatBoostClassifier
 
 class ModelTrainer:
     def __init__(self):
@@ -22,7 +24,9 @@ class ModelTrainer:
             'random_forest': RandomForestClassifier(n_estimators=100, random_state=42),
             'gradient_boosting': GradientBoostingClassifier(random_state=42),
             'logistic_regression': LogisticRegression(max_iter=1000, random_state=42),
-            'xgboost': XGBClassifier(use_label_encoder=False, eval_metric='logloss')
+            'xgboost': XGBClassifier(use_label_encoder=False, eval_metric='logloss'),
+            'lightgbm': LGBMClassifier(random_state=42),
+            'catboost': CatBoostClassifier(random_seed=42, verbose=False)
         }
         
         logging.basicConfig(
