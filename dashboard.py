@@ -25,7 +25,8 @@ def load_data():
 @st.cache_resource
 def load_models():
     models = {}
-    model_names = ['logistic_regression', 'random_forest', 'gradient_boosting', 'knn', 'neural_network','svm']
+    model_names = ['logistic_regression', 'random_forest', 'gradient_boosting', 
+                   'knn', 'neural_network', 'svm', 'lightgbm', 'catboost']
     
     try:
         for name in model_names:
