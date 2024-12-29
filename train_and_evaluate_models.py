@@ -16,6 +16,8 @@ import pickle
 import os
 import json
 from datetime import datetime
+from lightgbm import LGBMClassifier
+from catboost import CatBoostClassifier
 
 def train_and_evaluate():
     # Create directories if they don't exist
@@ -80,6 +82,21 @@ def train_and_evaluate():
             max_depth=5,
             random_state=42
         ),
+        'lightgbm': LGBMClassifier(
+            n_estimators=200,
+            learning_rate=0.1,
+            max_depth=20,
+            random_state=42,
+            class_weight='balanced'
+        ),
+        'catboost': CatBoostClassifier(
+            iterations=200,
+            learning_rate=0.1,
+            depth=6,
+            random_seed=42,
+            verbose=False,
+            class_weights=[1, 2]  # Adjust class weights for imbalanced data
+        ),
         'neural_network': MLPClassifier(
             hidden_layer_sizes=(100, 50),
             max_iter=1000,
@@ -120,6 +137,24 @@ def train_and_evaluate():
                 'n_estimators': [100, 200, 300],
                 'max_depth': [15, 20, 25],
                 'min_samples_split': [2, 5, 10]
+            }
+            grid_search = GridSearchCV(model, param_grid, cv=5, scoring='accuracy', n_jobs=-1)
+            grid_search.fit(X_train_scaled, y_train_balanced)
+            model = grid_search.best_estimator_
+        elif name == 'lightgbm':
+            param_grid = {
+                'n_estimators': [100, 200, 300],
+                'max_depth': [15, 20, 25],
+                'learning_rate': [0.01, 0.1]
+            }
+            grid_search = GridSearchCV(model, param_grid, cv=5, scoring='accuracy', n_jobs=-1)
+            grid_search.fit(X_train_scaled, y_train_balanced)
+            model = grid_search.best_estimator_
+        elif name == 'catboost':
+            param_grid = {
+                'iterations': [100, 200, 300],
+                'depth': [4, 6, 8],
+                'learning_rate': [0.01, 0.1]
             }
             grid_search = GridSearchCV(model, param_grid, cv=5, scoring='accuracy', n_jobs=-1)
             grid_search.fit(X_train_scaled, y_train_balanced)
